@@ -2,10 +2,13 @@
 
 section .data
     msg_equal db "AX == BX (Equal, ZF=1)",10,0
-    len_equal equ $ - msg_equal 
+
+    len_equal equ $ - msg_equal
+
     ;10 decimal / 0x0A hex - newline character to move cursor to the next line after printing
     ;0 - null terminator
     msg_not_equal db "AX != BX (Not Equal, ZF=0)",10,0
+    
     len_not_equal equ $ - msg_not_equal
 
 section .text
