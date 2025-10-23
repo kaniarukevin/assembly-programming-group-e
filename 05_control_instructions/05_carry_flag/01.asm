@@ -1,27 +1,48 @@
 ; JC → Jump if Carry
+
 section .data
     msg_carry db "Carry occurred (CF=1)",10,0
+    len_carry equ $ - msg_carry
+
     msg_nocarry db "No carry (CF=0)",10,0
+    len_nocarry equ $ - msg_nocarry
+
+    msg db "Hello, this is Kevin Kaniaru, Student No: 164806",10,0
+    len_msg equ $ - msg
 
 section .text
     global _start
 _start:
-    mov ax,0FFFFh
-    add ax,1       ; sets CF=1
+    mov eax,0FFFFh
+    add eax,1       ; sets CF=1
     jc carry
 
+    ; no carry branch
     mov ecx, msg_nocarry
-    jmp print
+    mov edx, len_nocarry
+    call print_msg
+    jmp print_name
 
 carry:
     mov ecx, msg_carry
+    mov edx, len_carry
+    call print_msg
 
-print:
-    mov eax,4
-    mov ebx,1
-    mov edx,40
-    int 0x80
+print_name:
+    mov ecx, msg
+    mov edx, len_msg
+    call print_msg
 
+    ; exit
     mov eax,1
     xor ebx,ebx
     int 0x80
+
+; -------------------------
+; Procedure: print message
+; -------------------------
+print_msg:
+    mov eax,4       ; sys_write
+    mov ebx,1       ; stdout
+    int 0x80
+    ret
